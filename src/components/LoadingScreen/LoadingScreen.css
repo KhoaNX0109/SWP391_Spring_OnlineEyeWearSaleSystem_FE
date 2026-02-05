@@ -1,0 +1,44 @@
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-logo {
+    animation: blurPulse 2.5s ease-in-out infinite;
+}
+
+.loading-logo img {
+    width: 300px;
+    height: auto;
+    filter: brightness(0) invert(1);
+}
+
+@keyframes blurPulse {
+    0% {
+        filter: blur(20px);
+        opacity: 0.3;
+    }
+
+    40% {
+        filter: blur(0px);
+        opacity: 1;
+    }
+
+    60% {
+        filter: blur(0px);
+        opacity: 1;
+    }
+
+    100% {
+        filter: blur(20px);
+        opacity: 0.3;
+    }
+}
