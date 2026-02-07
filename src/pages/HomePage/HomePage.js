@@ -140,7 +140,7 @@ const HomePage = () => {
                                 </div>
                             )}
                         </div>
-                        <a href="#lenses">Tròng kính</a>
+                        <a href="/trong-kinh">Tròng kính</a>
                         <a href="#sunglasses">Kính râm</a>
                         <a href="#stores">Tìm cửa hàng</a>
                         <a href="#about">Xem thêm</a>

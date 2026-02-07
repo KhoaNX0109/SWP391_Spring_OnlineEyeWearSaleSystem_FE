@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login/Login';
 import Home from './pages/Home/Home';
 import HomePage from './pages/HomePage/HomePage';
+import LensPage from './pages/LensPage/LensPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
                 <Route path="/homepage" element={<HomePage />} />
-                <Route path="/" element={<Navigate to="/homepage" replace />} />
+                <Route path="/trong-kinh" element={<LensPage />} />
+                <Route path="/" element={<Navigate to="/homepage" replace />}/>
             </Routes>
         </Router>
     );
