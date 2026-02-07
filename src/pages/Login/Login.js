@@ -24,7 +24,7 @@ const Login = () => {
 
         try {
             await authService.login(formData.username, formData.password);
-            navigate('/home');
+            navigate('/homepage');
         } catch (err) {
             setError(err.message || 'Login failed');
         } finally {
