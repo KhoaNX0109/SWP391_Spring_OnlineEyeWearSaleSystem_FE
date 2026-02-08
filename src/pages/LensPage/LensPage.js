@@ -1,11 +1,9 @@
-import React, { useState, useEffect }from 'react';
-import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo.png';
+import React, { useState, useEffect } from 'react';
+import Header from '../../components/Header/Header';
 import productService from '../../services/productService';
 import './LensPage.css';
 
 const LensPage = () => {
-    const navigate = useNavigate();
     const [lenses, setLenses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [viewMode, setViewMode] = useState('list'); // 'grid-small', 'grid-large', 'list'
@@ -15,7 +13,7 @@ const LensPage = () => {
             try {
                 const data = await productService.getAllLenses();
                 setLenses(data);
-            }catch (error) {
+            } catch (error) {
                 console.error('Error fetching lenses:', error);
             } finally {
                 setLoading(false);
@@ -24,32 +22,43 @@ const LensPage = () => {
         fetchLenses();
     }, []);
 
-    // Placeholder features cho mỗi lens dựa trên lensType
+    // SVG feature icons
+    const featureIcons = {
+        shield: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>,
+        droplet: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>,
+        eye: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>,
+        check: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"></polyline></svg>,
+        lock: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>,
+        sun: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>,
+        circle: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle></svg>
+    };
+
+    // Placeholder features cho moi lens dua tren lensType
     const getLensFeatures = (lensType) => {
         const featureMap = {
             'Single Vision': [
-                { icon: '🛡️', label: 'Hạn chế bám hơi nước' },
-                { icon: '💧', label: 'Hạn chế trầy xước' },
-                { icon: '🔵', label: 'Giải pháp chắn ánh sáng xanh' },
-                { icon: '✨', label: 'Ngăn ASR có hại' }
+                { icon: featureIcons.shield, label: 'Hạn chế bám hơi nước' },
+                { icon: featureIcons.droplet, label: 'Hạn chế trầy xước' },
+                { icon: featureIcons.eye, label: 'Giải pháp chắn ánh sáng xanh' },
+                { icon: featureIcons.sun, label: 'Ngăn ASR có hại' }
             ],
             'Bifocal': [
-                { icon: '🛡️', label: 'Hạn chế bám hơi nước' },
-                { icon: '✅', label: 'Hạn chế trầy xước' },
-                { icon: '🔵', label: 'Đô bền cao' },
-                { icon: '🔒', label: 'Phù hợp với mọi đáng mắt' }
+                { icon: featureIcons.shield, label: 'Hạn chế bám hơi nước' },
+                { icon: featureIcons.check, label: 'Hạn chế trầy xước' },
+                { icon: featureIcons.eye, label: 'Độ bền cao' },
+                { icon: featureIcons.lock, label: 'Phù hợp với mọi dáng mắt' }
             ],
             'Progressive': [
-                { icon: '🛡️', label: 'Hạn chế bám hơi nước' },
-                { icon: '⭕', label: 'Hạn chế hình ảnh chìm/thực' },
-                { icon: '🔵', label: 'Đô bền cao nhận diện chính thực' },
-                { icon: '💧', label: 'Ngăn ASR có hại' }
+                { icon: featureIcons.shield, label: 'Hạn chế bám hơi nước' },
+                { icon: featureIcons.circle, label: 'Hạn chế hình ảnh chìm/thực' },
+                { icon: featureIcons.eye, label: 'Độ bền cao nhận diện chính thực' },
+                { icon: featureIcons.droplet, label: 'Ngăn ASR có hại' }
             ],
             'default': [
-                { icon: '🛡️', label: 'Hạn chế bám hơi nước' },
-                { icon: '✨', label: 'Chống chói' },
-                { icon: '💧', label: 'Hạn chế trầy xước' },
-                { icon: '🔵', label: 'Ngăn ASR có hại' }
+                { icon: featureIcons.shield, label: 'Hạn chế bám hơi nước' },
+                { icon: featureIcons.sun, label: 'Chống chói' },
+                { icon: featureIcons.droplet, label: 'Hạn chế trầy xước' },
+                { icon: featureIcons.eye, label: 'Ngăn ASR có hại' }
             ]
         };
         return featureMap[lensType] || featureMap['default'];
@@ -65,43 +74,7 @@ const LensPage = () => {
 
     return (
         <div className="lens-page">
-            {/* Header - giống HomePage */}
-            <header className="header">
-                <div className="header-container">
-                    <div className="logo" onClick={() => navigate('/homepage')} style={{ cursor: 'pointer' }}>
-                        <img src={logo} alt="Anna Eyeglasses" />
-                    </div>
-                    <nav className="nav">
-                        <a href="/homepage">Trang chủ</a>
-                        <a href="#gong-kinh">Gọng Kính ▾</a>
-                        <a href="/trong-kinh" className="active">Tròng kính</a>
-                        <a href="#kinh-ram">Kính râm</a>
-                        <a href="#cua-hang">Tìm cửa hàng</a>
-                        <a href="#xem-them">Xem thêm ▾</a>
-                    </nav>
-                    <div className="header-actions">
-                        <button className="icon-btn" onClick={() => navigate('/login')}>
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </button>
-                        <button className="icon-btn">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.35-4.35"></path>
-                            </svg>
-                        </button>
-                        <button className="icon-btn">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                <line x1="3" y1="6" x2="21" y2="6"></line>
-                                <path d="M16 10a4 4 0 0 1-8 0"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </header>
+            <Header />
 
             {/* Banner Section */}
             <section className="lens-banner">
@@ -203,7 +176,7 @@ const LensPage = () => {
                             {lenses.map((lens) => {
                                 const features = getLensFeatures(lens.lensType);
                                 return (
-                                    <div key={lens.lensId}className="lens-card">
+                                    <div key={lens.lensId} className="lens-card">
                                         {/* Card Top - Brand & Tagline */}
                                         <div className="lens-card-header">
                                             <h3 className="lens-brand-name">{lens.brand}</h3>
@@ -261,10 +234,18 @@ const LensPage = () => {
                         </div>
                         <div className="footer-col">
                             <div className="social-icons">
-                                <button className="social-btn">📞</button>
-                                <button className="social-btn">📘</button>
-                                <button className="social-btn">ℹ️</button>
-                                <button className="social-btn">📷</button>
+                                <button className="social-btn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                </button>
+                                <button className="social-btn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                                </button>
+                                <button className="social-btn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                                </button>
+                                <button className="social-btn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                                </button>
                             </div>
                         </div>
                     </div>
