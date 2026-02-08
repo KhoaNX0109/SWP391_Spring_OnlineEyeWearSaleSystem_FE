@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo.png';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
-import productService from '../../services/productService';
+import Header from '../../components/Header/Header';
 import './HomePage.css';
 
 const HomePage = () => {
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [showFrameDropdown, setShowFrameDropdown] = useState(false);
-    const [frames, setFrames] = useState([]);
-    const [loadingFrames, setLoadingFrames] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -18,34 +12,6 @@ const HomePage = () => {
         }, 3000);
         return () => clearTimeout(timer);
     }, []);
-
-    const handleFrameHover = async () => {
-        setShowFrameDropdown(true);
-        if (frames.length === 0 && !loadingFrames) {
-            setLoadingFrames(true);
-            try {
-                const data = await productService.getAllFrames();
-                setFrames(data);
-            } catch (error) {
-                console.error('Error fetching frames:', error);
-            } finally {
-                setLoadingFrames(false);
-            }
-        }
-    };
-
-    const handleFrameLeave = () => {
-        setShowFrameDropdown(false);
-    };
-
-    const groupedFrames = frames.reduce((acc, frame) => {
-        const category = frame.category || 'Khác';
-        if (!acc[category]) {
-            acc[category] = [];
-        }
-        acc[category].push(frame);
-        return acc;
-    }, {});
 
     if (loading) {
         return <LoadingScreen />;
@@ -73,100 +39,7 @@ const HomePage = () => {
 
     return (
         <div className="homepage">
-            {/* Header */}
-            <header className="header">
-                <div className="header-container">
-                    <div className="logo">
-                        <img src={logo} alt="Anna Eyeglasses" />
-                    </div>
-                    <nav className="nav">
-                        <a href="#home">Trang chủ</a>
-                        <div
-                            className="nav-dropdown"
-                            onMouseEnter={handleFrameHover}
-                            onMouseLeave={handleFrameLeave}
-                        >
-                            <a href="#products" className="active">Gọng Kính</a>
-                            {showFrameDropdown && (
-                                <div className="dropdown-menu">
-                                    {loadingFrames ? (
-                                        <div className="dropdown-loading">Đang tải...</div>
-                                    ) : (
-                                        <div className="dropdown-content">
-                                            <div className="dropdown-columns">
-                                                {Object.keys(groupedFrames).length > 0 ? (
-                                                    <>
-                                                        <div className="dropdown-col">
-                                                            <h4>Chất liệu</h4>
-                                                            {groupedFrames['Titan'] && (
-                                                                <ul>
-                                                                    <li><a href="#titan">Gọng Titan</a></li>
-                                                                    <li><a href="#nhua">Gọng Nhựa</a></li>
-                                                                    <li><a href="#kim-loai">Gọng Kim Loại</a></li>
-                                                                    <li><a href="#pha-kim">Gọng nhựa pha kim loại</a></li>
-                                                                </ul>
-                                                            )}
-                                                        </div>
-                                                        <div className="dropdown-col">
-                                                            <h4>Hình dáng</h4>
-                                                            <ul>
-                                                                <li><a href="#oval">Gọng Kính Oval</a></li>
-                                                                <li><a href="#tron">Gọng Kính Tròn</a></li>
-                                                                <li><a href="#vuong">Gọng Kính Vuông</a></li>
-                                                                <li><a href="#chu-nhat">Gọng Kính Chữ Nhật</a></li>
-                                                                <li><a href="#ba-giac">Gọng Kính Ba Giác</a></li>
-                                                                <li><a href="#mat-meo">Gọng Kính Mắt Mèo</a></li>
-                                                            </ul>
-                                                        </div>
-                                                        <div className="dropdown-col">
-                                                            <h4>Bộ sưu tập</h4>
-                                                            <ul>
-                                                                <li><a href="#tet">Tết An Chill</a></li>
-                                                                <li><a href="#titan">The Titan</a></li>
-                                                                <li><a href="#keo">Kéo Lụa</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <div className="dropdown-empty">Không có sản phẩm</div>
-                                                )}
-                                            </div>
-                                            <div className="dropdown-images">
-                                                <img src="/products/glasses1.jpg" alt="Frame 1" />
-                                                <img src="/products/glasses2.jpg" alt="Frame 2" />
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                        <a href="/trong-kinh">Tròng kính</a>
-                        <a href="#sunglasses">Kính râm</a>
-                        <a href="#stores">Tìm cửa hàng</a>
-                        <a href="#about">Xem thêm</a>
-                    </nav>
-                    <div className="header-actions">
-                        <button className="icon-btn" onClick={() => navigate('/login')}>
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </button>
-                        <button className="icon-btn">
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="m21 21-4.35-4.35"></path>
-                            </svg>
-                        </button>
-                        <button className="icon-btn">
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                <path d="M9 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-3"></path>
-                                <path d="M9 2v4h6V2"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </header>
+            <Header />
 
             {/* Hero Banner */}
             <section className="hero-banner">
